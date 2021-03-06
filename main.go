@@ -28,11 +28,10 @@ func main() {
 	docs.SwaggerInfo.Description = "REST API for Web Service order"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8080"
-	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"https"}
 
 	r := gin.Default()
-
 	db := config.SetupModels()
 
 	r.Use(func(c *gin.Context) {
@@ -40,7 +39,7 @@ func main() {
 		c.Next()
 	})
 
-	// the jwt middleware
+	// THE JWT MIDDLEWARE AUTH
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
@@ -92,12 +91,9 @@ func main() {
 				"message": message,
 			})
 		},
-
-		TokenLookup: "header: Authorization, query: token, cookie: jwt",
-
+		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName: "Bearer",
-
-		TimeFunc: time.Now,
+		TimeFunc:      time.Now,
 	})
 
 	if err != nil {
@@ -110,6 +106,7 @@ func main() {
 		log.Fatal("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
 	}
 
+	// ROUTES REST API
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"response": "REST API Web Service"})
 	})
@@ -133,7 +130,7 @@ func main() {
 		auth.DELETE("/orders/:orderID", controllers.DeleteOrder)
 	}
 
-	item := r.Group("/items")
+	item := r.Group("api/items")
 	{
 		item.GET("", controllers.GetAllItem)
 		item.POST("", controllers.InsertNewItem)
@@ -143,5 +140,6 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	//RUNNING ON PORT DEFAULT / 8080
 	r.Run()
 }

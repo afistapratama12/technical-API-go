@@ -1,63 +1,224 @@
+definitions:
+  main:
+    properties: 
+        code: 
+          type: integer
+        expire: 
+          type: date
+        token:
+          type: string
+    type: object
+  models.Order: 
+    properties: 
+        orderID : 
+          type : integer
+        customerName : 
+          type : string
+        orderedAt :
+          type : string
+        items : 
+          type : array
+    type : object
+  controllers.InsertNewOrder: 
+    properties: 
+      order: 
+        status:
+          type: string
+        order:
+          type: string
+    type : object
+  controllers.InsertNewOrder: 
+    properties: 
+      order: 
+        status:
+          type: string
+        order:
+          type: string
+    type : object
+    controllers.InsertNewOrder: 
+    properties: 
+      order: 
+        status:
+          type: string
+    type : object
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server celler server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
-  version: "1.0"
+  contact: {}
+  license: {}
 paths:
   /login:
-    post: {}
+    post: 
+      description: Auth to get token
+      operatonId: Authenticate
+      parameters:
+      - description: Username
+        type: string
+        name: username
+        in: formData
+        required: true
+      - description: Password
+        type: string
+        name: password
+        in: formData
+        required: true
+      produces: 
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main'
+        "401":
+          description: Unauthorize
+          schema:
+            $ref: '#/definitions/main'
+      summary: Provides a JSON web token
   /api/orders:
     get: 
+      description: get all orders
       consumes:
       - application/json 
-      description: get all orders
-      parameters:
-      - description: 
-    post: 
-      consumes:
-        - application/json
-        description: add by json account
-        parameters:
-        - description: Add account
-          in: body
-          name: account
-          required: true
+      produces:
+      - application/json
+      tags:
+      - orders
+      - list
+      responses:
+        "200":
+          description: OK
           schema:
-            $ref: '#/definitions/model.AddAccount'
-            type: object
-        produces:
-        - application/json
-        responses:
-          "200":
-            description: OK
-            schema:
-              $ref: '#/definitions/model.Account'
-          "400":
-            description: Bad Request
-            schema:
-              $ref: '#/definitions/httputil.HTTPError'
-          "404":
-            description: Not Found
-            schema:
-              $ref: '#/definitions/httputil.HTTPError'
-          "500":
-            description: Internal Server Error
-            schema:
-              $ref: '#/definitions/httputil.HTTPError'
-        summary: Add a account
+            type: array
+            $ref: '#/definitions/models.Order'
+      summary: List existing orders
+    post: 
+      security:
+        bearerAuth: []
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      description: create a new Orders
+      parameters:
+      - description: Create orders
+        in: body
+        name: customerName
+        required: true
+        schema:
+          $ref: '#/definitions/model.Order'
+      - description: Create orders
+        in: body
+        name: orderedAt
+        required: true
+        schema:
+          $ref: '#/definitions/model.Order'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.InserNewOrder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.InserNewOrder'
+        "401":
+          description: Unauthorize
+          schema:
+            $ref: '#/definitions/controllers.InserNewOrder'
+        summary: Create new orders
         tags:
-        - accounts
+        - orders
+        - create
   /api/orders/{id}:
-    get: {}
-  /api/orders/{id}:
-    put: {}
-  /api/orders/{id}:
-    delete: {}
+    get: 
+      description: Get order by id
+      consumes: 
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - order 
+      parameters:
+      - type: integer
+        description: order ID
+        name: orderID
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref : '#/definitions/models/Orders'
+      summary: List order by ID
+    put: 
+      security:
+        bearerAuth: []
+      description: update a single order
+      consumes: 
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - order 
+      parameters:
+      - type: integer
+        description: order ID
+        name: orderID
+        in: path
+        required: true
+      - type: string
+        description: customer name
+        name: customerName
+        in: body
+        required: true
+        schema:
+          $ref: '#/devinitions/models.Order'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.UpdateOrder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.UpdateOrder'
+        "401":
+          description: Unauthorize
+          schema:
+            $ref: '#/definitions/controllers.UpdateOrder'
+      summary: Update Order
+    delete: 
+      security:
+        bearerAuth: []
+      description: Delete an order
+      consumes: 
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - order 
+      - delete
+      parameters:
+      - type: integer
+        description: order ID
+        name: orderID
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.DeleteOrder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.DeleteOrder'
+        "401":
+          description: Unauthorize
+          schema:
+            $ref: '#/definitions/controllers.DeleteOrder'
+      summary: Delete Order
+securityDefinitions:
+  bearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
