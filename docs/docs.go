@@ -145,7 +145,7 @@ var doc = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/controller.InsertNewOrder"
+                            "$ref": "#/definitions/controllers.InsertNewOrder"
                         }
                     }
                 }
