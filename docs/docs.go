@@ -275,13 +275,13 @@ var doc = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions//controllers.DeleteOrder"
+                            "$ref": "#/definitions/controllers.DeleteOrder"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions//controllers.DeleteOrder"
+                            "$ref": "#/definitions/controllers.DeleteOrder"
                         }
                     }
                 }
@@ -367,7 +367,7 @@ var doc = `{
                 }
             }
         },
-        "controllers.UpdateOrder": {
+        "controllers.UpdateOrderByID": {
             "type": "object",
             "properties": {
                 "order": {
