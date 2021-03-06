@@ -3,6 +3,7 @@ package main
 import (
 	"golang-api/config"
 	"golang-api/controllers"
+	"golang-api/docs"
 	"golang-api/models"
 	"log"
 	"net/http"
@@ -17,7 +18,18 @@ import (
 
 var identityKey = "id"
 
+// @securityDefinitions.apikey bearerAuth
+// @in header
+// @name Authorization
 func main() {
+
+	// Swagger 2.0 Meta Information
+	docs.SwaggerInfo.Title = "APi Web Service"
+	docs.SwaggerInfo.Description = "REST API for Web Service order"
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8080"
+	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.Schemes = []string{"https"}
 
 	r := gin.Default()
 

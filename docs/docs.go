@@ -10,9 +10,6 @@ import (
 
 	"github.com/alecthomas/template"
 	"github.com/swaggo/swag"
-
-	"github.com/swaggo/files"       // swagger embed files
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 var doc = `{
@@ -26,7 +23,27 @@ var doc = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+		"/auth/token": {
+			"post":{
+				"description" : "Authenticate with JWT",
+				"produces": [
+					"appication/json"
+				],
+				"summary" : "Provides a JSOn Web Token",
+				"operationId" : "Authentication", 
+				"parameters" : [
+					{
+						"type" : "string:,
+						"description" :"Useraname",
+						"name" : "username",
+						"in" : "formData",
+						"required":true
+					}
+				]
+			}
+		}
+	}
 }`
 
 type swaggerInfo struct {
