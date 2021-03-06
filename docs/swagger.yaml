@@ -81,7 +81,6 @@ paths:
       - application/json
       tags:
       - orders
-      - list
       responses:
         "200":
           description: OK
@@ -109,7 +108,7 @@ paths:
         name: orderedAt
         required: true
         schema:
-          $ref: '#/definitions/model.Order'
+          $ref: '#/definitions/models.Order'
       responses:
         "200":
           description: OK
@@ -126,7 +125,6 @@ paths:
         summary: Create new orders
         tags:
         - orders
-        - create
   /api/orders/{id}:
     get: 
       description: Get order by id
@@ -146,7 +144,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref : '#/definitions/models/Orders'
+            $ref : '#/definitions/models.Order'
       summary: List order by ID
     put: 
       security:
@@ -157,7 +155,7 @@ paths:
       produces:
       - application/json
       tags:
-      - order 
+      - orders 
       parameters:
       - type: integer
         description: order ID
@@ -194,8 +192,7 @@ paths:
       produces:
       - application/json
       tags:
-      - order 
-      - delete
+      - orders 
       parameters:
       - type: integer
         description: order ID

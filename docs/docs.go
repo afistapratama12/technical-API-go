@@ -30,6 +30,9 @@ var doc = `{
                 "produces": [
                     "application/json"
                 ],
+				"tags":[
+					"login"
+				],
                 "summary": "Provides a JSON web token",
                 "operationId" : "Authenticate",
                 "parameters": [
@@ -58,13 +61,13 @@ var doc = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/main"
+                            "$ref": "#/definitions/main.error"
                         }
                     }
                 }
             }
         },
-        "/orders":{
+        "/api/orders":{
             "get": {
                 "description": "Get all the orders",
                 "consumes": [
@@ -74,8 +77,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "orders",
-                    "list"
+                    "orders"
                 ],
                 "summary": "List existing orders",
                 "responses": {
@@ -84,7 +86,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Orders"
+                                "$ref": "#/definitions/models.Order"
                             }
                         }
                     }
@@ -104,8 +106,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "orders",
-                    "create"
+                    "orders"
                 ],
                 "summary": "Create new orders",
                 "parameters": [
@@ -115,7 +116,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Order"
+                            "customerName" : "Afista Pratama"
                         }
                     },
                     {
@@ -124,7 +125,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Order"
+                            "orderedAt" : "2021-01-20"
                         }
                     }
                 ],
@@ -150,7 +151,7 @@ var doc = `{
                 }
             }
         },
-        "/orders/{id}": {
+        "/api/orders{id}": {
             "get" : {
                 "description": "Get order by id",
                 "consumes": [
@@ -160,8 +161,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "orders",
-                    "list"
+                    "orders"
                 ],
                 "summary": "List orders by id",
                 "parameters": [
@@ -177,7 +177,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Orders"
+                            "$ref": "#/definitions/models.Order"
                         }
                     }
                 }
@@ -253,7 +253,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "order"
+                    "orders"
                 ],
                 "summary": "Delete Order",
                 "parameters": [
@@ -293,30 +293,58 @@ var doc = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type" : "integer"
+                    "type" : "integer",
+					"example" : 200
                 },
                 "expire" : {
-                    "type" : "date"
+                    "type" : "date",
+					"example" :"2020-01-20 11.30.49+07.00"
                 },
                 "token" : {
-                    "type" : "string"
+                    "type" : "string",
+					"example" :"safsafsdHfkjshdgfaldshfdahflkj"
                 }
             }
         },
+		"main.error": {
+			"type": "object",
+			"properties":{
+				"code": {
+					"type": "integer",
+					"example" : 401
+				},
+				"messages": {
+					"type": "string",
+					"example" : "error unauthorize"
+				}
+			}
+		},
         "models.Order": {
             "type" : "object",
             "properties": {
                 "orderID" : {
-                    "type" : "integer"
+                    "type" : "integer",
+					"example" : 1
                 },
                 "customerName" : {
-                    "type" : "string"
+                    "type" : "string",
+					"example" :"Afista Pratama"
                 },
                 "orderedAt" : {
-                    "type" : "string"
+                    "type" : "string",
+					"example" :"2021-02-29"
                 },
                 "items" : {
-                    "type" : "array"
+                    "type" : "array",
+					"example" :[{
+						"itemCode" : "BRNG001",
+						"itemName" : "Barang kawe super",
+						"quantity" : 100 
+					},{
+						"itemCode" : "BRNG002",
+						"itemName" : "Barang kawe super 2",
+						"quantity" : 100 
+					}]
                 }
             }
         },
@@ -324,11 +352,17 @@ var doc = `{
             "type": "object",
             "properties": {
                 "order": {
+					"type" : "object",
                     "status" : {
-                        "type" : "string"
+                        "type" : "string",
+						"example" :"scucess create order"
                     },
                     "order" : {
-                        "type" : "string"
+                        "type" : "object",
+						"example" :{
+							"customerName" : "Afista Ganteng",
+							"orderedAt" : "2021-02-28"
+						}
                     }  
                 }
             }
@@ -337,11 +371,17 @@ var doc = `{
             "type": "object",
             "properties": {
                 "order": {
+					"type" : "object",
                     "status" : {
-                        "type" : "string"
+                        "type" : "string",
+						"example" :"success update Order"
                     },
                     "order" : {
-                        "type" : "string"
+                        "type" : "object",
+						"example" : {
+							"customerName" : "Afista Ganteng",
+							"orderedAt" : "2021-02-28"
+						}
                     }  
                 }
             }
@@ -350,8 +390,10 @@ var doc = `{
             "type": "object",
             "properties": {
                 "order": {
+					"type" : "object",
                     "status" : {
-                        "type" : "string"
+                        "type" : "string",
+						"example" :"success delete order"
                     }
                 }
             }
